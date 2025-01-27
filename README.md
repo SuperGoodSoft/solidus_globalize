@@ -24,6 +24,14 @@ Add the following to your `Gemfile`:
 gem 'solidus_globalize', github: 'solidusio-contrib/solidus_globalize'
 ```
 
+For Ruby 3.x you have to force the usage of the friendly_id-globalize master version:
+
+```ruby
+gem 'friendly_id-globalize', github: 'norman/friendly_id-globalize', branch: "master"
+gem 'solidus_globalize', github: 'solidusio-contrib/solidus_globalize'
+```
+
+
 Run `bundle install`
 
 You can use the generator to install migrations and append solidus_globalize assets to
@@ -55,6 +63,16 @@ into an initializer:
 
 ```ruby
 SolidusGlobalize::Config.supported_locales = [:en, :'pt-BR']
+```
+
+Additionally, the translatable fields on individual models can be adjusted with configuration:
+
+```ruby
+SolidusGlobalize::Config[:translatable_fields].merge!(
+  {
+    'Spree::OptionValue' => [:presentation]
+  }
+)
 ```
 
 **PS 1.** The languages you add to this configuration need to be supported by

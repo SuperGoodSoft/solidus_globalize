@@ -6,8 +6,25 @@ module SolidusGlobalize
 
     included do |klass|
       accepts_nested_attributes_for :translations
-      klass.whitelisted_ransackable_associations ||= []
-      klass.whitelisted_ransackable_associations |= ['translations']
+      if ::Spree.solidus_gem_version < Gem::Version.new('3.3')
+        klass.whitelisted_ransackable_associations  ||= []
+        klass.whitelisted_ransackable_associations |= ['translations']
+      else
+        klass.allowed_ransackable_associations ||= []
+        klass.allowed_ransackable_associations |= ['translations']
+      end
+
+      klass.const_set("TranslationRansackable", Module.new).module_eval do
+        def ransackable_attributes(*_args)
+          authorizable_ransackable_attributes
+        end
+
+        def ransackable_associations(*_args)
+          authorizable_ransackable_associations
+        end
+
+        "#{klass}::Translation".constantize.singleton_class.prepend(self)
+      end
     end
 
     class_methods do

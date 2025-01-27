@@ -11,6 +11,10 @@ RSpec.describe "Translations" do
           Spree::Product::Translation.new(
             locale: 'pt-BR',
             name: 'Antimatéria'
+          ),
+          Spree::Product::Translation.new(
+            locale: 'en',
+            name: 'Antimatter'
           )
         ])
     end
@@ -26,12 +30,12 @@ RSpec.describe "Translations" do
     end
 
     it 'displays translated product page' do
-      visit '/pt-BR/products/antimatter'
+      visit '/products/antimatter?locale=pt-BR'
       expect(page.title).to have_content('Antimatéria')
     end
 
     it 'displays translated products list' do
-      visit '/pt-BR/products'
+      visit '/products?locale=pt-BR'
       expect(page).to have_content('Antimatéria')
     end
   end
